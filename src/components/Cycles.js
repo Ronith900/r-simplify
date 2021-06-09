@@ -1,7 +1,7 @@
 import React from "react";
 import BookingProvider from "../providers/booking";
 import { Link } from "react-router-dom";
-import { Card, Button, Alert } from "react-bootstrap";
+import { Card, Button, Alert,Badge } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBackspace } from "@fortawesome/free-solid-svg-icons";
 class Cycles extends React.Component {
@@ -32,6 +32,26 @@ class Cycles extends React.Component {
     this.alert(cycle.name);
     this.props.onBookingConfirm(userCart);
   };
+
+  getAddButton(cycle) {
+    if (cycle.availability !== 0)
+      return (
+        <Button
+          className="float-right"
+          variant="outline-success"
+          size="sm"
+          onClick={() => this.handleCartItem(cycle)}
+        >
+          <FontAwesomeIcon icon="plus" />
+          &nbsp;Add
+        </Button>
+      );
+  }
+
+  getBadgeVariant(cycle){
+    if(cycle.availability === 0) return 'warning';
+    return 'success'
+  }
 
   alert(name) {
     this.setState({ showState: { show: true, cycle: name } });
@@ -74,21 +94,13 @@ class Cycles extends React.Component {
                 <Card.Body>
                   <Card.Title>
                     {cycle.name}
-                    <Button
-                      className="float-right"
-                      variant="outline-success"
-                      size="sm"
-                      onClick={() => this.handleCartItem(cycle)}
-                    >
-                      <FontAwesomeIcon icon="plus" />
-                      &nbsp;Add
-                    </Button>
+                    {this.getAddButton(cycle)}
                   </Card.Title>
                   <hr></hr>
                   <Card.Subtitle className="mb-2 text-muted">
                     Cost: S$ {this.formatCost(cycle.cost_per_hour)}
                   </Card.Subtitle>
-                  <Card.Text>Availability: {cycle.availability}</Card.Text>
+                  <Card.Text>Availability: <Badge variant={this.getBadgeVariant(cycle)} pill size="lg">{cycle.availability}</Badge></Card.Text>
                 </Card.Body>
               </Card>
               <br></br>
