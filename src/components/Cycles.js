@@ -64,7 +64,7 @@ class Cycles extends React.Component {
         </Alert>
         <div className="row">
           {this.props.shop.cycles.map((cycle) => (
-            <div className="col-lg-3 col-md-6 col-sm-12">
+            <div className="col-lg-4 col-md-6 col-sm-12">
               <Card style={{ width: "18rem" }}>
                 <Card.Img
                   variant="top"

@@ -29,36 +29,38 @@ class NavBar extends React.Component {
   render() {
     return (
       <>
-        <Navbar bg="dark" variant="dark" sticky="top">
-          <Navbar.Brand to="/">Simplify</Navbar.Brand>
-          <Nav className="mr-auto">
-            {this.props.menus.map((menu) => (
-              <Link
-                className={this.getNavState(menu.id)}
-                to={menu.link}
-                onClick={() => this.handleNavClick(menu.id)}
-              >
-                {menu.image}&nbsp;{menu.name} {menu.badge}{" "}
-                <span className="sr-only">(current)</span>
-              </Link>
-            ))}
-          </Nav>
-          <Navbar.Collapse className="justify-content-end">
+        <Navbar bg="dark" variant="dark" expand="lg">
+          <Navbar.Brand href="#home">Simplify</Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="mr-auto">
+              {this.props.menus.map((menu) => (
+                <Link
+                  className={this.getNavState(menu.id)}
+                  to={menu.link}
+                  onClick={() => this.handleNavClick(menu.id)}
+                >
+                  {menu.image}&nbsp;{menu.name} {menu.badge}{" "}
+                  <span className="sr-only">(current)</span>
+                </Link>
+              ))}
+            </Nav>
             <Navbar.Text>
               Signed in as: <a href="#login">{this.props.username}</a>
             </Navbar.Text>
             &nbsp;&nbsp;
-            <Link to="/logout">            <Button
-              className="text-right"
-              variant="outline-danger"
-              size="sm"
-              onClick={() => this.props.logout()}
-            >
-
-              <FontAwesomeIcon icon={faSignOutAlt}/>&nbsp;
-              Logout
-            </Button></Link>
-
+            <Link to="/logout">
+              {" "}
+              <Button
+                className="text-right"
+                variant="outline-danger"
+                size="sm"
+                onClick={() => this.props.logout()}
+              >
+                <FontAwesomeIcon icon={faSignOutAlt} />
+                &nbsp; Logout
+              </Button>
+            </Link>
           </Navbar.Collapse>
         </Navbar>
       </>
