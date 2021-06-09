@@ -16,7 +16,7 @@ class Tasks {
   }
 
   getCurrentUser(user_id) {
-    return axios.get("http://localhost:8000/current_user/" + user_id).then(result => result.data);
+    return axios.get("https://b-simplify.herokuapp.com/current_user/" + user_id).then(result => result.data);
   }
 
   deleteTask(task_id) {
