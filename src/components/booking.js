@@ -5,6 +5,7 @@ import BookingProvider from "../providers/booking";
 import { Table, Image, Button} from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import moment from "moment";
 
 class Booking extends React.Component {
   
@@ -13,7 +14,9 @@ class Booking extends React.Component {
   }
 
   getBookedTime(bookedTime){
-    return (new Date(bookedTime).toTimeString())
+    const d = new Date(String(bookedTime)).toLocaleTimeString()
+    console.log(d,bookedTime)
+    return bookedTime
   }
 
   async removeBooking(cart) {
@@ -31,7 +34,7 @@ class Booking extends React.Component {
               <th>Item Info</th>
               <th>Quantity</th>
               <th>Cost</th>
-              <th>Booking Time</th>
+              <th>Pick-up Time</th>
               <th>Status</th>
               <th>Action</th>
             </tr>
@@ -60,7 +63,7 @@ class Booking extends React.Component {
                     cart.total_number
                   )}
                 </td>
-                <td>{this.getBookedTime(cart.updated_at)}</td>
+                <td>{this.getBookedTime(cart.time_cycle_picked)}</td>
                 <td>
                     Booked
                 </td>

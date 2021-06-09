@@ -10,6 +10,7 @@ import Cycles from "./Cycles";
 import Login from "./Login";
 import Logout from "./logout";
 import About from "./NotFound";
+import moment from "moment";
 import Task from "../providers/task";
 import {
   faBicycle,
@@ -30,10 +31,10 @@ class App extends React.Component {
     super(props);
     this.state = {
       token: this.getToken()[0],
-      rentalShops:[],
+      rentalShops: [],
       user_object: {},
       cart: [],
-      userBooking:[],
+      userBooking: [],
       booking: 0,
       shopOwner: false,
       shopOB: 0,
@@ -43,11 +44,9 @@ class App extends React.Component {
   async componentDidMount() {
     const token_object = this.getToken();
     const rentalShops = await new Shop().getRentalShops();
-    const cart = await new BookingProvider().getUserCart();
-    
-    this.setState({ token: token_object[0],rentalShops ,cart});
+    let cart = await new BookingProvider().getUserCart();
+    this.setState({ token: token_object[0], rentalShops, cart });
     this.getComponentsData(token_object[2]);
-
   }
 
   setToken = async (userToken) => {
@@ -60,11 +59,10 @@ class App extends React.Component {
   };
 
   async getComponentsData(shopOwner) {
-
     const userBooking = await new BookingProvider().getUserBookings();
-    console.log("booking",userBooking)
+    console.log("booking", userBooking);
     const shopOB = await new BookingProvider().getShopOwnerBookings();
-    
+
     this.setState({
       booking: userBooking.length,
       userBooking,
@@ -103,36 +101,48 @@ class App extends React.Component {
     this.setState({ cart: cartValue + 1 });
   };
 
-  handleCartDelete = async({id:cartID}) => {
+  handleCartDelete = async ({ id: cartID }) => {
     const cartRemoved = await new BookingProvider().deleteBooking(cartID);
     const cart = this.state.cart.filter((cart) => cart.id !== cartID);
     this.setState({ cart: cart });
-  }
+  };
 
-  getShop({match}){
+  getShop({ match }) {
     const shopID = match.params.id;
-    const shop = this.state.rentalShops.filter(shop => shop.shop_id === shopID)
-    return shop[0]
+    const shop = this.state.rentalShops.filter(
+      (shop) => shop.shop_id === shopID
+    );
+    return shop[0];
   }
 
   handleNewBooking = (userCart) => {
-    this.setState({cart:userCart})
-  }
+    this.setState({ cart: userCart });
+  };
 
-  handleConfirmBooking = async(cart,cartBooked) => {
+  handleConfirmBooking = async (cart, cartBooked) => {
     const carts = this.state.cart.filter((cart) => cart.id !== cartBooked.id);
     const rentalShops = await new Shop().getRentalShops();
     const userBooking = await new BookingProvider().getUserBookings();
-  
-    this.setState({ cart: carts,rentalShops,userBooking });
-  }
-  handleCancellBooking = async(booking) => {
-    const userBooking = this.state.userBooking.filter((book) => book.id !== booking.id);
+
+    this.setState({ cart: carts, rentalShops, userBooking });
+  };
+  handleCancellBooking = async (booking) => {
+    const userBooking = this.state.userBooking.filter(
+      (book) => book.id !== booking.id
+    );
     const rentalShops = await new Shop().getRentalShops();
-    this.setState({ userBooking,rentalShops});
+    this.setState({ userBooking, rentalShops });
+  };
+
+  handleTimeChange = (cart,date) => {
+    const cartDuplicate = this.state.cart;
+    const cartIndex = cartDuplicate.indexOf(cart);
+    cart.time_cycle_picked = moment(date).format("h:mm a D MMMM YYYY")
+    cartDuplicate[cartIndex] = cart;
+    this.setState({cart:cartDuplicate})
   }
 
-  handleIncrementDecrement =(changeType, cart) =>{
+  handleIncrementDecrement = (changeType, cart) => {
     const carts = [...this.state.cart];
     const index = carts.indexOf(cart);
 
@@ -144,7 +154,7 @@ class App extends React.Component {
       carts[index] = { ...cart };
     }
     this.setState({ cart: carts });
-  }
+  };
 
   terminateBooking = () => {
     const bookingValue = this.state.booking;
@@ -178,18 +188,18 @@ class App extends React.Component {
         badge: this.state.userBooking.length,
       },
     ];
-    console.log(this.state.shopOwner)
+    console.log(this.state.shopOwner);
 
-    if(this.state.shopOwner){
+    if (this.state.shopOwner) {
       baseMenus.push({
         name: "Owner",
         id: 5,
         link: "/owner",
         image: <FontAwesomeIcon icon={faPeopleArrows}></FontAwesomeIcon>,
-      })
+      });
     }
 
-    return baseMenus
+    return baseMenus;
   }
 
   logoutUser = () => {
@@ -199,9 +209,9 @@ class App extends React.Component {
   };
 
   render() {
-    console.log(this.state.rentalShops)
+    console.log(this.state.rentalShops);
     if (!this.state.token) {
-      return <Login/>;
+      return <Login />;
     }
     return (
       <div>
@@ -213,43 +223,47 @@ class App extends React.Component {
           />
           <br></br>
           <div className="container-fluid">
-          <Switch>
-            <Route
-              path="/shops/:id"
-              render={(props) => (
-                <Cycles {...props} onBookingConfirm={this.handleNewBooking} shop={this.getShop(props)} />
-              )}
-            />
-        
-            <Route exact path="/">
-              <Shops rentalShops={this.state.rentalShops}/>
-            </Route>
-            <Route path="/cart">
-              <Cart
-                onConfirmBooking={this.handleConfirmBooking}
-                onIncrementDecrement={this.handleIncrementDecrement}
-                onCartDelete={this.handleCartDelete}
-                myCart={this.state.cart}
+            <Switch>
+              <Route
+                path="/shops/:id"
+                render={(props) => (
+                  <Cycles
+                    {...props}
+                    onBookingConfirm={this.handleNewBooking}
+                    shop={this.getShop(props)}
+                  />
+                )}
               />
-            </Route>
-            <Route path="/bookings">
-              <Booking
-                onCancelBooking={this.handleCancellBooking}
-                myBookings={this.state.userBooking}
-              />
-            </Route>
-            <Route path="/login" component={Login} />
-            <Route path="/logout" component={Logout} />
-            <Route path="/not-found" component={About} />
-            <Route path="/owner">
-              <Owner cycleReturned={this.cycleReturned} />
-            </Route>
 
-            <Redirect exact from="/shops" to="/"></Redirect>
-            <Redirect to="/not-found" />
-          </Switch>
+              <Route exact path="/">
+                <Shops rentalShops={this.state.rentalShops} />
+              </Route>
+              <Route path="/cart">
+                <Cart
+                  onConfirmBooking={this.handleConfirmBooking}
+                  onTimeChange ={this.handleTimeChange}
+                  onIncrementDecrement={this.handleIncrementDecrement}
+                  onCartDelete={this.handleCartDelete}
+                  myCart={this.state.cart}
+                />
+              </Route>
+              <Route path="/bookings">
+                <Booking
+                  onCancelBooking={this.handleCancellBooking}
+                  myBookings={this.state.userBooking}
+                />
+              </Route>
+              <Route path="/login" component={Login} />
+              <Route path="/logout" component={Logout} />
+              <Route path="/not-found" component={About} />
+              <Route path="/owner">
+                <Owner cycleReturned={this.cycleReturned} />
+              </Route>
+
+              <Redirect exact from="/shops" to="/"></Redirect>
+              <Redirect to="/not-found" />
+            </Switch>
           </div>
-          
         </Router>
       </div>
     );

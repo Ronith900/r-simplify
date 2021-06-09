@@ -3,7 +3,14 @@ import BookingProvider from "../providers/booking";
 import { Link } from "react-router-dom";
 import { Table, Image, Button, ButtonGroup } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash,faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+import { faTrash, faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+import DateFnsUtils from '@date-io/date-fns';
+import moment from "moment";
+import Grid from '@material-ui/core/Grid';
+import {
+  MuiPickersUtilsProvider,
+  KeyboardTimePicker,
+} from '@material-ui/pickers';
 
 class Cart extends React.Component {
   async confirmBooking(cart) {
@@ -14,6 +21,7 @@ class Cart extends React.Component {
       cycle: cart.cycle_obj.url,
       total_number: cart.total_number,
       total_cost: cart.cycle_obj.cost_per_hour,
+      time_cycle_picked:cart.time_cycle_picked,
       booking_status: "booked",
     };
     const cartBooked = await new BookingProvider().createUpdateBooking(
@@ -25,28 +33,39 @@ class Cart extends React.Component {
   checkMinMax(type_in, itemQ, max) {
     if (itemQ === 1 && type_in === "D") {
       return "disabled";
-    } else if (itemQ === max && type_in === "I") {
+    } else if (itemQ === max && type_in === "h:mm ") {
       return "disabled";
     }
   }
 
   formatCost(cycleCost) {
-    return (parseFloat(cycleCost)).toFixed(2);
+    return parseFloat(cycleCost).toFixed(2);
+  }
+
+  handleDateChangeTime(date) {
+    console.log(moment(date).format("h:mm a D MMMM YYYY"));
   }
 
   render() {
-    if(this.props.myCart.length === 0){return <div className="text-center align-top"> 
-      <h4 >Your cart is empty</h4>
-      <Link to='/'>Add Cycles to your cart</Link>
-    </div>}
+    if (this.props.myCart.length === 0) {
+      return (
+        <div className="text-center align-top">
+          <h4>Your cart is empty</h4>
+          <Link to="/">Add Cycles to your cart</Link>
+        </div>
+      );
+    }
     return (
       <>
         <Table striped bordered hover responsive className="text-center">
           <thead>
             <tr>
-              <th className="text-left" style={{width:400}}>Item Info</th>
+              <th className="text-left" style={{ width: 400 }}>
+                Item Info
+              </th>
               <th>Quantity</th>
               <th>Cost/Hr</th>
+              <th>Pick-up Time</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -93,28 +112,38 @@ class Cart extends React.Component {
                 </td>
                 <td>
                   S$
-                  {this.formatCost(
-                    cart.cycle_obj.cost_per_hour
-                  )}
+                  {this.formatCost(cart.cycle_obj.cost_per_hour)}
+                </td>
+                <td>
+                  {" "}
+                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <Grid>
+                      <KeyboardTimePicker
+                        margin="normal"
+                        id="time-picker"
+                        value={cart.time_cycle_picked}
+                        onChange={(date) => this.props.onTimeChange(cart,date)}
+                        KeyboardButtonProps={{
+                          "aria-label": "change time",
+                        }}
+                      />
+                    </Grid>
+                  </MuiPickersUtilsProvider>
                 </td>
                 <td>
                   <Button
                     variant="outline-success"
                     onClick={() => this.confirmBooking(cart)}
                   >
-                    <FontAwesomeIcon
-                      icon={faCheckCircle}
-                    />
+                    <FontAwesomeIcon icon={faCheckCircle} />
                   </Button>
-                  <br/>
+                  <br />
                   <Button
                     className="mt-2"
                     variant="outline-danger"
                     onClick={() => this.props.onCartDelete(cart)}
                   >
-                    <FontAwesomeIcon
-                      icon={faTrash}
-                    />
+                    <FontAwesomeIcon icon={faTrash} />
                   </Button>
                 </td>
               </tr>
