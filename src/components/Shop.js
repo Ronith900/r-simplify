@@ -13,7 +13,7 @@ class Shops extends React.Component {
           {this.props.rentalShops.map((shop) => (
             <div className="col-lg-4 col-md-6 col-sm-12">
               <Card s>
-              <Card.Img variant="top" src={shop.image} style={{height:"200px"}} />
+              <Card.Img variant="top" src={shop.image} style={{height:"200px"}} fluid/>
                 <Card.Body>
                   <Card.Title>{shop.name}</Card.Title>
                   <hr></hr>

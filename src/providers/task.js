@@ -1,7 +1,13 @@
 import axios from "axios";
+import s_base from './s_base';
 
 class Tasks {
-  api_url = "http://localhost:8000/api/tasks/";
+  constructor(){
+    this.tokenString = localStorage.getItem('token')
+    this.userToken = JSON.parse(this.tokenString);
+    this.header = {Authorization: `Token ${this.userToken?.token}`}
+  }
+  api_url = "/api";
 
   async getTasks(user_id) {
     const { data: tasks } = await axios.get(this.api_url + "?ID=" + user_id);
@@ -16,7 +22,7 @@ class Tasks {
   }
 
   getCurrentUser(user_id) {
-    return axios.get("https://b-simplify.herokuapp.com/current_user/" + user_id).then(result => result.data);
+    return s_base.get("/current_user/" + user_id).then(result => result.data);
   }
 
   deleteTask(task_id) {

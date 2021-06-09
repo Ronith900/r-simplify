@@ -1,7 +1,10 @@
 import React from "react";
 import Shop from "../providers/shops";
+import { Link } from "react-router-dom";
 import BookingProvider from "../providers/booking";
 import { Table, Image, Button} from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 class Booking extends React.Component {
   
@@ -21,13 +24,11 @@ class Booking extends React.Component {
   render() {
     return (
       <>
-        <Table striped bordered hover>
+        <Table striped bordered hover responsive className="text-center">
           <thead>
             <tr>
               <th>Booking ID</th>
-              <th>Cycle</th>
-              <th>Shop Name</th>
-              <th>Name</th>
+              <th>Item Info</th>
               <th>Quantity</th>
               <th>Cost</th>
               <th>Booking Time</th>
@@ -39,14 +40,19 @@ class Booking extends React.Component {
             {this.props.myBookings.map((cart) => (
               <tr>
                 <td>{cart.booking_id}</td>
-                <td>
-                  <Image
-                    src={cart.cycle_obj.image}
-                    style={{ height: "200px" }}
-                  />
+                <td className="text-left">
+                  <Link to={`/shops/${cart.shop_obj.shop_id}`}>
+                    {cart.shop_obj.name}
+                  </Link>
+                  <div className="m-2">
+                    <Image
+                      src={cart.cycle_obj.image}
+                      style={{ height: "100px" }}
+                      rounded
+                    />
+                    <span className="ml-4">{cart.cycle_obj.name}</span>
+                  </div>
                 </td>
-                <td>{cart.shop_obj.name}</td>
-                <td>{cart.cycle_obj.name}</td>
                 <td>{cart.total_number}</td>
                 <td>S$
                   {this.getTotalCost(
@@ -63,7 +69,9 @@ class Booking extends React.Component {
                     variant="danger"
                     onClick={() => this.removeBooking(cart)}
                   >
-                    Cancel
+                                        <FontAwesomeIcon
+                      icon={faTrash}
+                    />
                   </Button>
                 </td>
               </tr>
