@@ -71,13 +71,16 @@ class Cart extends React.Component {
                   <ButtonGroup size="sm">
                     <Button
                       onClick={() => this.props.onIncrementDecrement("D", cart)}
+                      variant="outline-primary"
                       disabled={this.checkMinMax("D", cart.total_number)}
                     >
                       -
                     </Button>
+                    &nbsp;
                     <Button variant="light">{cart.total_number}</Button>
                     <Button
                       onClick={() => this.props.onIncrementDecrement("I", cart)}
+                      variant="outline-primary"
                       disabled={this.checkMinMax(
                         "I",
                         cart.total_number,
@@ -96,7 +99,7 @@ class Cart extends React.Component {
                 </td>
                 <td>
                   <Button
-                    variant="success"
+                    variant="outline-success"
                     onClick={() => this.confirmBooking(cart)}
                   >
                     <FontAwesomeIcon
@@ -106,7 +109,7 @@ class Cart extends React.Component {
                   <br/>
                   <Button
                     className="mt-2"
-                    variant="danger"
+                    variant="outline-danger"
                     onClick={() => this.props.onCartDelete(cart)}
                   >
                     <FontAwesomeIcon

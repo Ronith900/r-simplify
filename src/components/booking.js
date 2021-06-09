@@ -66,7 +66,7 @@ class Booking extends React.Component {
                 </td>
                 <td>
                 <Button
-                    variant="danger"
+                    variant="outline-danger"
                     onClick={() => this.removeBooking(cart)}
                   >
                                         <FontAwesomeIcon
