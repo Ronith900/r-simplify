@@ -67,6 +67,7 @@ class Owner extends React.Component {
               <th>User Name</th>
               <th>Quantity</th>
               <th>Cost</th>
+              <th>Pick-up Time</th>
               <th>Status</th>
               <th>Action</th>
             </tr>
@@ -95,13 +96,13 @@ class Owner extends React.Component {
                     cart.total_number
                   )}
                 </td>
-
+                <td>{cart.time_cycle_picked}</td>
                 <td>{cart.booking_status}</td>
                 <td>
                     <ButtonGroup vertical>
                     <DropdownButton
                     as={ButtonGroup}
-                    title="Dropdown"
+                    title="Edit Status"
                     variant="success"
                   > {this.getActionDetials(cart.booking_status).map((status)=> (<Dropdown.Item onClick={() => this.actionStatus(status.val,cart)}>{status.Dval}</Dropdown.Item>))}
                   </DropdownButton>
