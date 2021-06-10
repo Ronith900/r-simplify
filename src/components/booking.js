@@ -25,6 +25,14 @@ class Booking extends React.Component {
   }
 
   render() {
+    if (this.props.myBookings.length === 0) {
+      return (
+        <div className="text-center align-top">
+          <h4>You have no Bookings</h4>
+          <Link to="/cart">Go to Cart</Link>
+        </div>
+      );
+    }
     return (
       <>
         <Table striped bordered hover responsive className="text-center">
@@ -81,7 +89,6 @@ class Booking extends React.Component {
             ))}
           </tbody>
         </Table>
-        <p>Note: <i>All the bookings will be automatically cancelled 30 minutes after the booking time</i></p>
       </>
     );
   }

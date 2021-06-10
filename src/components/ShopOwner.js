@@ -59,14 +59,12 @@ class Owner extends React.Component {
   render() {
     return (
       <>
-        <Table striped bordered hover>
+        <Table striped bordered hover responsive className="text-center">
           <thead>
             <tr>
               <th>Booking ID</th>
-              <th>Cycle</th>
-              <th>Shop Name</th>
+              <th>Item Info</th>
               <th>User Name</th>
-              <th>Cycle Name</th>
               <th>Quantity</th>
               <th>Cost</th>
               <th>Status</th>
@@ -77,15 +75,18 @@ class Owner extends React.Component {
             {this.state.totalBookings.map((cart) => (
               <tr>
                 <td>{cart.booking_id}</td>
-                <td>
-                  <Image
-                    src={cart.cycle_obj.image}
-                    style={{ height: "200px" }}
-                  />
+                <td className="text-left">
+                    {cart.shop_obj.name}
+                  <div className="m-2">
+                    <Image
+                      src={cart.cycle_obj.image}
+                      style={{ height: "100px" }}
+                      rounded
+                    />
+                    <span className="ml-4">{cart.cycle_obj.name}</span>
+                  </div>
                 </td>
-                <td>{cart.shop_obj.name}</td>
                 <td>{cart.user_obj.username}</td>
-                <td>{cart.cycle_obj.name}</td>
                 <td>{cart.total_number}</td>
                 <td>
                   S$
@@ -111,13 +112,6 @@ class Owner extends React.Component {
             ))}
           </tbody>
         </Table>
-        <p>
-          Note:{" "}
-          <i>
-            All the bookings will be automatically cancelled 30 minutes after
-            the booking time
-          </i>
-        </p>
       </>
     );
   }
