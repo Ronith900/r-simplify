@@ -115,8 +115,10 @@ class App extends React.Component {
     return shop[0];
   }
 
-  handleNewBooking = (userCart) => {
-    this.setState({ cart: userCart });
+  handleNewBooking = (newCartItem) => {
+    const cart = [...this.state.cart];
+    cart.unshift(newCartItem)
+    this.setState({ cart});
   };
 
   handleConfirmBooking = async (cart, cartBooked) => {

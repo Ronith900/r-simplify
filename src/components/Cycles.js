@@ -27,10 +27,10 @@ class Cycles extends React.Component {
       cycle: cycle.url,
       shop: this.props.shop.url,
     };
-    const cart = await new BookingProvider().createUpdateBooking(data, false);
-    const userCart = await new BookingProvider().getUserCart();
+    const newCartItem = await new BookingProvider().createUpdateBooking(data, false);
+    console.log(newCartItem)
     this.alert(cycle.name);
-    this.props.onBookingConfirm(userCart);
+    this.props.onBookingConfirm(newCartItem);
   };
 
   getAddButton(cycle) {

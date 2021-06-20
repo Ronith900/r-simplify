@@ -29,7 +29,7 @@ class BookingProvider {
     if(cart){
       return s_base.put(`${this.api_url}/booking/${booking.id}/`, booking,{headers:this.header}).then((result) => result.data);
     }
-    return s_base.post(`${this.api_url}/booking/`, booking,{headers:this.header});
+    return s_base.post(`${this.api_url}/booking/`, booking,{headers:this.header}).then(result => result.data);
   }
 
   deleteBooking(bookingID) {
