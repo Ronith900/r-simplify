@@ -28,12 +28,12 @@ class Cart extends React.Component {
       cartData,
       true
     );
-    this.props.onConfirmBooking(cart, cartBooked);
+    this.props.onConfirmBooking(cartBooked);
   }
   checkMinMax(type_in, itemQ, max) {
     if (itemQ === 1 && type_in === "D") {
       return "disabled";
-    } else if (itemQ === max && type_in === "h:mm ") {
+    } else if (itemQ === max && type_in === "I") {
       return "disabled";
     }
   }

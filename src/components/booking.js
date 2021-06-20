@@ -9,8 +9,8 @@ import moment from "moment";
 
 class Booking extends React.Component {
   
-  getTotalCost(cycleCost, quantity) {
-    return (quantity * parseFloat(cycleCost)).toFixed(2);
+  getTotalCost(cycleCost) {
+    return (parseFloat(cycleCost)).toFixed(2);
   }
 
   getBookedTime(bookedTime){
@@ -41,7 +41,7 @@ class Booking extends React.Component {
               <th>Booking ID</th>
               <th>Item Info</th>
               <th>Quantity</th>
-              <th>Cost</th>
+              <th>Cost/Hr</th>
               <th>Pick-up Time</th>
               <th>Status</th>
               <th>Action</th>
@@ -68,7 +68,7 @@ class Booking extends React.Component {
                 <td>S$
                   {this.getTotalCost(
                     cart.cycle_obj.cost_per_hour,
-                    cart.total_number
+            
                   )}
                 </td>
                 <td>{this.getBookedTime(cart.time_cycle_picked)}</td>

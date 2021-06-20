@@ -118,15 +118,17 @@ class App extends React.Component {
   handleNewBooking = (newCartItem) => {
     const cart = [...this.state.cart];
     cart.unshift(newCartItem)
-    this.setState({ cart});
+    this.setState({ cart });
   };
 
-  handleConfirmBooking = async (cart, cartBooked) => {
-    const carts = this.state.cart.filter((cart) => cart.id !== cartBooked.id);
+  handleConfirmBooking = async (cartBooked) => {
+    const cart = this.state.cart.filter((cart) => cart.booking_id !== cartBooked.booking_id);
+    const userBooking = [...this.state.userBooking];
+    userBooking.unshift(cartBooked);
+    //update the availablity
     const rentalShops = await new Shop().getRentalShops();
-    const userBooking = await new BookingProvider().getUserBookings();
 
-    this.setState({ cart: carts, rentalShops, userBooking });
+    this.setState({ cart, rentalShops, userBooking });
   };
   handleCancellBooking = async (booking) => {
     const userBooking = this.state.userBooking.filter(
